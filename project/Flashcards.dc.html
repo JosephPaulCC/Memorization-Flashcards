@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0;background:#F1EDE3}
+body{font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Noto Sans','Helvetica Neue',sans-serif;color:#26221B;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+input,textarea,select,button{font-family:inherit}
+a{color:#C4551C}
+a:hover{color:#9E3E0E}
+@keyframes dcSheetUp{from{transform:translateY(28px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes dcFade{from{opacity:0}to{opacity:1}}
+@keyframes dcPop{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+</style>
+</helmet>
+<div ref="{{ rootRef }}" style="min-height:100dvh;background:#F1EDE3">
+<div style="max-width:460px;margin:0 auto;min-height:100dvh;background:#F7F4EC;border-left:1px solid rgba(38,34,27,.08);border-right:1px solid rgba(38,34,27,.08);position:relative">
+
+<sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+<div data-screen-label="Dashboard" style="padding:22px 18px 120px">
+  <div style="display:flex;align-items:center;gap:10px">
+    <div style="flex:1">
+      <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:27px;letter-spacing:-0.5px;color:#26221B">Recall</div>
+    </div>
+    <button onClick="{{ openSettings }}" aria-label="Settings" style="width:44px;height:44px;border-radius:12px;border:1px solid rgba(38,34,27,.14);background:#FFFFFF;color:#26221B;display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:manipulation">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"></line><circle cx="14" cy="6" r="2.6" fill="#FFFFFF"></circle><line x1="4" y1="12" x2="20" y2="12"></line><circle cx="8" cy="12" r="2.6" fill="#FFFFFF"></circle><line x1="4" y1="18" x2="20" y2="18"></line><circle cx="16" cy="18" r="2.6" fill="#FFFFFF"></circle></svg>
+    </button>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:16px">
+    <div style="background:#FFFFFF;border:1px solid rgba(38,34,27,.12);border-radius:14px;padding:12px 12px 10px">
+      <div style="display:flex;align-items:center;gap:5px;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:22px;color:#26221B"><svg width="16" height="16" viewBox="0 0 24 24" fill="var(--accent, #C4551C)" stroke="none"><path d="M12 2.5s5.5 4.6 5.5 9.7a5.5 5.5 0 0 1-11 0c0-2.1 1-3.8 2.1-5 .1 2 1 3.2 2.1 3.4-.9-3.2.2-6.3 1.3-8.1z"></path></svg><span>{{ statStreak }}</span></div>
+      <div style="font-size:10.5px;font-weight:600;letter-spacing:.7px;text-transform:uppercase;color:#9A937F;margin-top:4px">Day streak</div>
+    </div>
+    <div style="background:#FFFFFF;border:1px solid rgba(38,34,27,.12);border-radius:14px;padding:12px 12px 10px">
+      <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:22px;color:#26221B">{{ statAcc }}</div>
+      <div style="font-size:10.5px;font-weight:600;letter-spacing:.7px;text-transform:uppercase;color:#9A937F;margin-top:4px">Accuracy</div>
+    </div>
+    <div style="background:#FFFFFF;border:1px solid rgba(38,34,27,.12);border-radius:14px;padding:12px 12px 10px">
+      <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:22px;color:#26221B">{{ statTime }}</div>
+      <div style="font-size:10.5px;font-weight:600;letter-spacing:.7px;text-transform:uppercase;color:#9A937F;margin-top:4px">Study time</div>
+    </div>
+  </div>
+
+  <div style="position:relative;margin-top:16px">
+    <span style="position:absolute;left:13px;top:0;bottom:0;display:flex;align-items:center;color:#9A937F"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20.5 20.5-4-4"></path></svg></span>
+    <input value="{{ search }}" onChange="{{ onSearch }}" placeholder="Search decks and cards" style="width:100%;height:48px;border-radius:13px;border:1.5px solid rgba(38,34,27,.16);background:#FFFFFF;padding:0 14px 0 40px;font-size:16px;color:#26221B;outline:none" style-focus="border-color:var(--accent, #C4551C)">
+  </div>
+
+  <sc-if value="{{ searching }}" hint-placeholder-val="{{ false }}">
+    <div style="margin-top:18px">
+      <sc-if value="{{ sDecksAny }}" hint-placeholder-val="{{ false }}">
+        <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:12.5px;letter-spacing:1px;text-transform:uppercase;color:#857E6F;margin:4px 0 10px">Decks</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+        <sc-for list="{{ sDecks }}" as="deck" hint-placeholder-count="1">
+          <button onClick="{{ deck.open }}" style="width:100%;text-align:left;background:#FFFFFF;border:1px solid rgba(38,34,27,.12);border-radius:14px;padding:13px 15px;cursor:pointer;touch-action:manipulation;display:block" style-active="transform:scale(.99)">
+            <div dir="auto" style="font-size:15.5px;font-weight:650;color:#26221B">{{ deck.name }}</div>
+            <div style="font-size:12.5px;color:#857E6F;margin-top:3px">{{ deck.sub }}</div>
+          </button>
+        </sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{ sCardsAny }}" hint-placeholder-val="{{ false }}">
+        <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:12.5px;letter-spacing:1px;text-transform:uppercase;color:#857E6F;margin:18px 0 10px">Cards</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+        <sc-for list="{{ sCards }}" as="hit" hint-placeholder-count="1">
+          <button onClick="{{ hit.open }}" style="width:100%;text-align:left;background:#FFFFFF;border:1px solid rgba(38,34,27,.12);border-radius:14px;padding:13px 15px;cursor:pointer;touch-action:manipulation;display:block" style-active="transform:scale(.99)">
+            <div dir="auto" style="font-size:14.5px;font-weight:600;color:#26221B;line-height:1.35">{{ hit.q }}</div>
+            <div dir="auto" style="font-size:13px;color:#6E6857;margin-top:2px;line-height:1.35">{{ hit.a }}</div>
+            <div style="display:inline-block;margin-top:7px;font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:11px;letter-spacing:.5px;color:#857E6F;background:rgba(38,34,27,.06);border-radius:999px;padding:3px 9px">{{ hit.deckName }}</div>
+          </button>
+        </sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{ sNone }}" hint-placeholder-val="{{ false }}">
+        <div style="text-align:center;color:#857E6F;font-size:14px;padding:26px 0">No matches</div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ notSearching }}" hint-placeholder-val="{{ true }}">
+    <sc-for list="{{ folders }}" as="folder" hint-placeholder-count="1">
+      <div>
+        <div style="display:flex;align-items:center;gap:8px;margin:24px 0 10px">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#857E6F" stroke-width="2" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+          <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:12.5px;letter-spacing:1px;text-transform:uppercase;color:#857E6F">{{ folder.name }}</span>
+          <span style="font-size:11px;font-weight:600;color:#B9B29F">{{ folder.count }}</span>
+          <span style="flex:1"></span>
+          <button onClick="{{ folder.del }}" aria-label="Delete folder" style="width:34px;height:34px;border-radius:9px;border:none;background:none;color:#B9B29F;display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:manipulation">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"></path><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path><path d="m6 7 1 13h10l1-13"></path></svg>
+          </button>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+        <sc-for list="{{ folder.decks }}" as="deck" hint-placeholder-count="1">
+          <button onClick="{{ deck.open }}" style="width:100%;text-align:left;background:#FFFFFF;border:1px solid rgba(38,34,27,.12);border-radius:16px;padding:14px 16px;cursor:pointer;touch-action:manipulation;display:block" style-active="transform:scale(.99)">
+            <div style="display:flex;align-items:baseline;gap:10px">
+              <span dir="auto" style="flex:1;font-size:16.5px;font-weight:650;color:#26221B;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ deck.name }}</span>
+              <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:13px;color:var(--accent, #C4551C)">{{ deck.pct }}</span>
+            </div>
+            <div style="height:6px;border-radius:999px;background:rgba(38,34,27,.08);margin:10px 0 8px;overflow:hidden">
+              <div style="height:100%;border-radius:999px;background:var(--accent, #C4551C);width:{{ deck.pctW }}"></div>
+            </div>
+            <div style="font-size:12.5px;color:#857E6F">{{ deck.sub }}</div>
+          </button>
+        </sc-for>
+        </div>
+        <sc-if value="{{ folder.empty }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:13px;color:#B9B29F;padding:4px 2px">No decks in this folder</div>
+        </sc-if>
+      </div>
+    </sc-for>
+
+    <sc-if value="{{ hasUngrouped }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;align-items:center;gap:8px;margin:24px 0 10px">
+        <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:12.5px;letter-spacing:1px;text-transform:uppercase;color:#857E6F">Ungrouped</span>
+        <span style="font-size:11px;font-weight:600;color:#B9B29F">{{ ungroupedCount }}</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+      <sc-for list="{{ ungrouped }}" as="deck" hint-placeholder-count="2">
+        <button onClick="{{ deck.open }}" style="width:100%;text-align:left;background:#FFFFFF;border:1px solid rgba(38,34,27,.12);border-radius:16px;padding:14px 16px;cursor:pointer;touch-action:manipulation;display:block" style-active="transform:scale(.99)">
+          <div style="display:flex;align-items:baseline;gap:10px">
+            <span dir="auto" style="flex:1;font-size:16.5px;font-weight:650;color:#26221B;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ deck.name }}</span>
+            <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:13px;color:var(--accent, #C4551C)">{{ deck.pct }}</span>
+          </div>
+          <div style="height:6px;border-radius:999px;background:rgba(38,34,27,.08);margin:10px 0 8px;overflow:hidden">
+            <div style="height:100%;border-radius:999px;background:var(--accent, #C4551C);width:{{ deck.pctW }}"></div>
+          </div>
+          <div style="font-size:12.5px;color:#857E6F">{{ deck.sub }}</div>
+        </button>
+      </sc-for>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ noDecks }}" hint-placeholder-val="{{ false }}">
+      <div style="text-align:center;padding:56px 20px 20px">
+        <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:18px;color:#26221B">No decks yet</div>
+        <div style="font-size:14px;color:#857E6F;margin-top:6px;line-height:1.5">Create a deck, then add cards one by one or paste a whole list.</div>
+      </div>
+    </sc-if>
+  </sc-if>
+
+  <button onClick="{{ newDeck }}" style="position:fixed;bottom:20px;right:max(20px, calc(50% - 230px + 20px));z-index:30;height:54px;padding:0 20px 0 16px;border-radius:999px;border:none;background:var(--accent, #C4551C);color:#FFFFFF;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:15px;display:flex;align-items:center;gap:8px;box-shadow:0 10px 24px rgba(38,34,27,.28);cursor:pointer;touch-action:manipulation" style-active="transform:scale(.97)">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+    New deck
+  </button>
+</div>
+</sc-if>
+
+<sc-if value="{{ isDeck }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Deck" style="padding:16px 18px 48px">
+  <div style="display:flex;align-items:center;gap:6px">
+    <button onClick="{{ goHome }}" aria-label="Back" style="width:44px;height:44px;border-radius:12px;border:none;background:none;color:#26221B;display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:manipulation;margin-left:-10px">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19 8 12l7-7"></path></svg>
+    </button>
+    <div style="flex:1;min-width:0">
+      <div dir="auto" style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:20px;color:#26221B;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ dName }}</div>
+      <sc-if value="{{ hasFolder }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;color:#857E6F;margin-top:1px">{{ dFolder }}</div></sc-if>
+    </div>
+    <button onClick="{{ renameDeck }}" aria-label="Rename deck" style="width:44px;height:44px;border-radius:12px;border:1px solid rgba(38,34,27,.14);background:#FFFFFF;color:#26221B;display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:manipulation">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1.2-4.2L16.5 4.5a2.12 2.12 0 0 1 3 3L8.2 18.8 4 20z"></path></svg>
+    </button>
+    <button onClick="{{ deckDelete }}" aria-label="Delete deck" style="width:44px;height:44px;border-radius:12px;border:1px solid rgba(38,34,27,.14);background:#FFFFFF;color:#A8442F;display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:manipulation">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"></path><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path><path d="m6 7 1 13h10l1-13"></path></svg>
+    </button>
+  </div>
+
+  <div style="background:#FFFFFF;border:1px solid rgba(38,34,27,.12);border-radius:16px;padding:16px;margin-top:14px">
+    <div style="display:flex;align-items:center;gap:14px">
+      <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:30px;color:#26221B">{{ dPct }}</div>
+      <div style="flex:1"></div>
+      <div style="text-align:right;font-size:12.5px;color:#857E6F;line-height:1.5"><span style="color:#1E8A5A;font-weight:700">{{ dMastered }}</span> mastered<br><span style="color:#26221B;font-weight:700">{{ dRemaining }}</span> remaining</div>
+    </div>
+    <div style="height:8px;border-radius:999px;background:rgba(38,34,27,.08);margin-top:12px;overflow:hidden">
+      <div style="height:100%;border-radius:999px;background:var(--accent, #C4551C);width:{{ dPctW }}"></div>
+    </div>
+    <div style="font-size:12px;color:#9A937F;margin-top:8px">{{ dTotalLabel }} · mastered = 2 correct in a row</div>
+  </div>
+
+  <div style="background:#FFFFFF;border:1px solid rgba(38,34,27,.12);border-radius:16px;padding:2px 16px;margin-top:12px">
+    <button onClick="{{ toggleRev }}" style="display:flex;align-items:center;gap:12px;width:100%;background:none;border:none;padding:13px 0;cursor:pointer;text-align:left;touch-action:manipulation;border-bottom:1px solid rgba(38,34,27,.08)">
+      <span style="flex:1"><span style="display:block;font-size:15px;font-weight:600;color:#26221B">Reverse mode</span><span style="display:block;font-size:12.5px;color:#857E6F;margin-top:2px">Prompt with the answer, choose the question</span></span>
+      <span style="flex:none;width:50px;height:30px;border-radius:999px;background:{{ revBg }};position:relative;transition:background .15s"><span style="position:absolute;top:3px;left:{{ revKnob }};width:24px;height:24px;border-radius:50%;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:left .15s"></span></span>
+    </button>
+    <button onClick="{{ toggleRem }}" style="display:flex;align-items:center;gap:12px;width:100%;background:none;border:none;padding:13px 0;cursor:pointer;text-align:left;touch-action:manipulation">
+      <span style="flex:1"><span style="display:block;font-size:15px;font-weight:600;color:#26221B">Practice remaining only</span><span style="display:block;font-size:12.5px;color:#857E6F;margin-top:2px">Leave mastered cards out of sessions</span></span>
+      <span style="flex:none;width:50px;height:30px;border-radius:999px;background:{{ remBg }};position:relative;transition:background .15s"><span style="position:absolute;top:3px;left:{{ remKnob }};width:24px;height:24px;border-radius:50%;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:left .15s"></span></span>
+    </button>
+  </div>
+
+  <button onClick="{{ startPractice }}" style="width:100%;height:56px;margin-top:14px;border-radius:15px;border:none;background:{{ pracBg }};color:{{ pracFg }};font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:17px;cursor:pointer;touch-action:manipulation" style-active="transform:scale(.99)">Start practice</button>
+  <sc-if value="{{ hasNote }}" hint-placeholder-val="{{ false }}">
+    <div style="font-size:12.5px;color:#B4830B;text-align:center;margin-top:8px">{{ practiceNote }}</div>
+  </sc-if>
+
+  <div style="display:flex;align-items:center;gap:8px;margin:26px 0 10px">
+    <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:12.5px;letter-spacing:1px;text-transform:uppercase;color:#857E6F">Cards</span>
+    <span style="font-size:11px;font-weight:600;color:#B9B29F">{{ dCount }}</span>
+    <span style="flex:1"></span>
+    <button onClick="{{ bulkAdd }}" style="height:38px;padding:0 13px;border-radius:10px;border:1px solid rgba(38,34,27,.16);background:#FFFFFF;color:#26221B;font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:13px;cursor:pointer;touch-action:manipulation">Bulk add</button>
+    <button onClick="{{ addCard }}" style="height:38px;padding:0 13px;border-radius:10px;border:none;background:var(--accent, #C4551C);color:#FFFFFF;font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:13px;display:flex;align-items:center;gap:5px;cursor:pointer;touch-action:manipulation"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>Add</button>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:10px">
+  <sc-for list="{{ dCards }}" as="card" hint-placeholder-count="3">
+    <div style="background:#FFFFFF;border:1px solid rgba(38,34,27,.1);border-radius:14px;padding:12px 10px 12px 14px;display:flex;gap:8px;align-items:flex-start">
+      <div style="flex:1;min-width:0">
+        <div dir="auto" style="font-size:15px;font-weight:600;color:#26221B;line-height:1.35;word-break:break-word">{{ card.q }}</div>
+        <div dir="auto" style="font-size:13.5px;color:#6E6857;margin-top:3px;line-height:1.35;word-break:break-word">{{ card.a }}</div>
+        <div style="display:flex;gap:10px;margin-top:8px;font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:11px;color:#9A937F;align-items:center;flex-wrap:wrap">
+          <span style="color:#1E8A5A">{{ card.right }}</span>
+          <span style="color:#C6392C">{{ card.wrongN }}</span>
+          <sc-if value="{{ card.mastered }}" hint-placeholder-val="{{ false }}"><span style="background:#E7F4EC;color:#14532D;border-radius:999px;padding:2.5px 9px;letter-spacing:.5px">MASTERED</span></sc-if>
+        </div>
+      </div>
+      <button onClick="{{ card.edit }}" aria-label="Edit card" style="width:40px;height:40px;border-radius:10px;border:none;background:rgba(38,34,27,.05);color:#6E6857;display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:manipulation;flex:none">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1.2-4.2L16.5 4.5a2.12 2.12 0 0 1 3 3L8.2 18.8 4 20z"></path></svg>
+      </button>
+      <button onClick="{{ card.del }}" aria-label="Delete card" style="width:40px;height:40px;border-radius:10px;border:none;background:rgba(38,34,27,.05);color:#A8442F;display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:manipulation;flex:none">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"></path><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path><path d="m6 7 1 13h10l1-13"></path></svg>
+      </button>
+    </div>
+  </sc-for>
+  </div>
+  <sc-if value="{{ dEmpty }}" hint-placeholder-val="{{ false }}">
+    <div style="text-align:center;color:#857E6F;font-size:14px;padding:22px 10px;line-height:1.5">No cards yet. Use <b>Add</b> for one card or <b>Bulk add</b> to paste a list.</div>
+  </sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isSession }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Practice session" style="display:flex;flex-direction:column;min-height:100dvh;padding:14px 16px calc(18px + env(safe-area-inset-bottom))">
+  <div style="display:flex;align-items:center;gap:8px">
+    <button onClick="{{ endSession }}" style="height:40px;padding:0 13px;border-radius:11px;border:1px solid rgba(38,34,27,.16);background:#FFFFFF;color:#26221B;font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:13px;cursor:pointer;touch-action:manipulation">End session</button>
+    <div dir="auto" style="flex:1;text-align:center;font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:13px;color:#857E6F;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ sessDeckName }}</div>
+    <button onClick="{{ openSettings }}" aria-label="Settings" style="width:40px;height:40px;border-radius:11px;border:1px solid rgba(38,34,27,.16);background:#FFFFFF;color:#26221B;display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:manipulation">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"></line><circle cx="14" cy="6" r="2.6" fill="#FFFFFF"></circle><line x1="4" y1="12" x2="20" y2="12"></line><circle cx="8" cy="12" r="2.6" fill="#FFFFFF"></circle><line x1="4" y1="18" x2="20" y2="18"></line><circle cx="16" cy="18" r="2.6" fill="#FFFFFF"></circle></svg>
+    </button>
+  </div>
+
+  <sc-if value="{{ reviewing }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex;align-items:center;gap:8px;background:#F6EDD5;border:1px solid #DFC98C;color:#7A5E10;border-radius:12px;padding:7px 8px 7px 12px;margin-top:12px;font-size:12.5px;font-weight:600">
+      <span style="flex:1">{{ histNote }}</span>
+      <button onClick="{{ goCurrent }}" style="height:32px;padding:0 11px;border-radius:9px;border:1px solid #DFC98C;background:#FFFFFF;color:#7A5E10;font-weight:700;font-size:12px;cursor:pointer;touch-action:manipulation">Current →</button>
+    </div>
+  </sc-if>
+
+  <div style="background:#FFFFFF;border:1px solid rgba(38,34,27,.12);border-radius:18px;padding:16px 16px 18px;margin-top:14px;box-shadow:0 1px 2px rgba(38,34,27,.04)">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+      <span style="font-family:'Bricolage Grotesque',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.2px;color:#9A937F;text-transform:uppercase">{{ qLabel }}</span>
+      <sc-if value="{{ turnSkipped }}" hint-placeholder-val="{{ false }}"><span style="font-family:'Bricolage Grotesque',sans-serif;font-size:10px;font-weight:700;letter-spacing:.8px;background:#F6EDD5;color:#7A5E10;border-radius:999px;padding:2.5px 8px">SKIPPED</span></sc-if>
+      <span style="flex:1"></span>
+      <sc-if value="{{ isLiveView }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ editLive }}" aria-label="Edit this card" style="width:34px;height:34px;border-radius:9px;border:none;background:rgba(38,34,27,.05);color:#6E6857;display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:manipulation">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1.2-4.2L16.5 4.5a2.12 2.12 0 0 1 3 3L8.2 18.8 4 20z"></path></svg>
+        </button>
+        <button onClick="{{ delLive }}" aria-label="Delete this card" style="width:34px;height:34px;border-radius:9px;border:none;background:rgba(38,34,27,.05);color:#A8442F;display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:manipulation">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"></path><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path><path d="m6 7 1 13h10l1-13"></path></svg>
+        </button>
+      </sc-if>
+    </div>
+    <div style="display:flex;align-items:flex-start;gap:10px">
+      <div dir="auto" style="flex:1;font-size:var(--qsize, 23px);font-weight:650;line-height:1.32;color:#26221B;word-break:break-word;min-height:60px">{{ turnPrompt }}</div>
+      <button onClick="{{ speakPrompt }}" aria-label="Speak question" style="flex:none;width:44px;height:44px;border-radius:12px;border:none;background:color-mix(in srgb, var(--accent, #C4551C) 12%, #FFFFFF);color:var(--accent, #C4551C);display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:manipulation" style-active="transform:scale(.94)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor" stroke="none"></path><path d="M15.5 8.5a5 5 0 0 1 0 7"></path><path d="M18.3 6a9 9 0 0 1 0 12"></path></svg>
+      </button>
+    </div>
+  </div>
+
+  <div onClick="{{ reveal }}" style="position:relative;flex:1;display:flex;flex-direction:column;margin-top:14px;min-height:300px">
+    <sc-if value="{{ hiddenNow }}" hint-placeholder-val="{{ false }}">
+      <div style="position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;border:2px dashed rgba(38,34,27,.22);border-radius:16px;background:rgba(38,34,27,.03);cursor:pointer">
+        <div style="text-align:center;color:#857E6F;padding:20px">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12z"></path><circle cx="12" cy="12" r="2.8"></circle></svg>
+          <div style="font-size:14.5px;font-weight:600;margin-top:8px">Tap to show options</div>
+        </div>
+      </div>
+    </sc-if>
+    <div style="visibility:{{ optsVis }};display:flex;flex-direction:column;gap:10px">
+      <sc-for list="{{ opts }}" as="opt" hint-placeholder-count="4">
+        <button dir="auto" onClick="{{ opt.pick }}" style="display:flex;align-items:center;gap:8px;width:100%;min-height:var(--osize, 60px);padding:12px 10px 12px 16px;border-radius:14px;border:2px solid {{ opt.bd }};background:{{ opt.bg }};color:{{ opt.fg }};opacity:{{ opt.dim }};font-size:var(--otext, 16px);font-weight:{{ opt.w }};text-align:left;touch-action:manipulation;cursor:pointer;transition:transform .06s ease" style-active="transform:scale(.985)">
+          <span style="flex:1;line-height:1.35;word-break:break-word">{{ opt.text }}</span>
+          <span onClick="{{ opt.speak }}" role="button" aria-label="Speak option" style="flex:none;width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#857E6F;background:rgba(38,34,27,.06)">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor" stroke="none"></path><path d="M15.5 8.5a5 5 0 0 1 0 7"></path></svg>
+          </span>
+        </button>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:10px;margin-top:16px">
+    <button onClick="{{ goBack }}" aria-label="Previous turn" style="flex:none;width:52px;height:52px;border-radius:14px;border:1px solid rgba(38,34,27,.16);background:#FFFFFF;color:#26221B;opacity:{{ backOp }};display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:manipulation">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19 8 12l7-7"></path></svg>
+    </button>
+    <div style="flex:1;display:flex;justify-content:center">
+      <sc-if value="{{ showSkip }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ doSkip }}" style="width:100%;height:52px;border-radius:14px;border:1.5px solid rgba(38,34,27,.2);background:#FFFFFF;color:#26221B;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:15px;cursor:pointer;touch-action:manipulation">Skip</button>
+      </sc-if>
+      <sc-if value="{{ showNext }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ goNext }}" style="width:100%;height:52px;border-radius:14px;border:none;background:var(--accent, #C4551C);color:#FFFFFF;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:15px;cursor:pointer;touch-action:manipulation" style-active="transform:scale(.99)">Next</button>
+      </sc-if>
+    </div>
+    <button onClick="{{ goFwd }}" aria-label="Next turn" style="flex:none;width:52px;height:52px;border-radius:14px;border:1px solid rgba(38,34,27,.16);background:#FFFFFF;color:#26221B;opacity:{{ fwdOp }};display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:manipulation">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"></path></svg>
+    </button>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isResults }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Results" style="padding:22px 18px 40px">
+  <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:24px;color:#26221B">Session results</div>
+  <div style="background:#FFFFFF;border:1px solid rgba(38,34,27,.12);border-radius:18px;padding:20px;margin-top:14px;display:flex;align-items:center;gap:16px">
+    <div>
+      <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:42px;line-height:1;color:#26221B">{{ resScore }}</div>
+      <div style="font-size:12.5px;color:#857E6F;margin-top:7px">{{ resSub }}</div>
+    </div>
+    <div style="margin-left:auto;text-align:right">
+      <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:27px;color:var(--accent, #C4551C)">{{ resAcc }}</div>
+      <div style="font-size:10.5px;font-weight:600;letter-spacing:.7px;text-transform:uppercase;color:#9A937F;margin-top:2px">Accuracy</div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:10px;margin-top:16px">
+  <sc-for list="{{ resRows }}" as="r" hint-placeholder-count="3">
+    <div style="background:#FFFFFF;border:1px solid rgba(38,34,27,.1);border-radius:14px;padding:12px 14px;display:flex;gap:10px;align-items:flex-start">
+      <span style="flex:none;width:10px;height:10px;border-radius:50%;margin-top:5px;background:{{ r.dot }}"></span>
+      <div style="flex:1;min-width:0">
+        <div dir="auto" style="font-size:14.5px;font-weight:600;color:#26221B;line-height:1.35;word-break:break-word">{{ r.q }}</div>
+        <div dir="auto" style="font-size:13px;color:{{ r.ansColor }};margin-top:3px;word-break:break-word">{{ r.ansLine }}</div>
+        <sc-if value="{{ r.showCorrect }}" hint-placeholder-val="{{ false }}"><div dir="auto" style="font-size:13px;color:#1E8A5A;margin-top:2px;word-break:break-word">{{ r.correctLine }}</div></sc-if>
+      </div>
+      <span style="flex:none;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:10.5px;letter-spacing:.8px;color:{{ r.tagColor }};text-transform:uppercase;margin-top:4px">{{ r.tag }}</span>
+    </div>
+  </sc-for>
+  </div>
+
+  <button onClick="{{ backToDeck }}" style="width:100%;height:54px;margin-top:20px;border-radius:14px;border:none;background:var(--accent, #C4551C);color:#FFFFFF;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:16px;cursor:pointer;touch-action:manipulation">Back to deck</button>
+  <button onClick="{{ goHome }}" style="width:100%;height:50px;margin-top:10px;border-radius:14px;border:1.5px solid rgba(38,34,27,.18);background:#FFFFFF;color:#26221B;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:15px;cursor:pointer;touch-action:manipulation">Home</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ mDeck }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closeModal }}" style="position:fixed;inset:0;z-index:50;background:rgba(28,25,20,.45);display:flex;align-items:flex-end;justify-content:center;animation:dcFade .15s ease">
+    <div onClick="{{ eatClick }}" style="width:100%;max-width:460px;background:#FBF9F4;border-radius:22px 22px 0 0;padding:20px 20px calc(24px + env(safe-area-inset-bottom));animation:dcSheetUp .22s ease;max-height:88dvh;overflow:auto">
+      <div style="display:flex;align-items:center;margin-bottom:4px">
+        <div style="flex:1;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:18px;color:#26221B">{{ deckModalTitle }}</div>
+        <button onClick="{{ closeModal }}" aria-label="Close" style="width:38px;height:38px;border-radius:10px;border:none;background:rgba(38,34,27,.06);color:#6E6857;display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:manipulation"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg></button>
+      </div>
+      <label style="display:block;font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:11.5px;letter-spacing:.8px;text-transform:uppercase;color:#857E6F;margin:14px 0 6px">Deck name</label>
+      <input dir="auto" value="{{ fName }}" onChange="{{ onFName }}" placeholder="e.g. Hindi verbs" style="width:100%;height:48px;border-radius:12px;border:1.5px solid rgba(38,34,27,.18);background:#FFFFFF;padding:0 14px;font-size:16px;color:#26221B;outline:none" style-focus="border-color:var(--accent, #C4551C)">
+      <label style="display:block;font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:11.5px;letter-spacing:.8px;text-transform:uppercase;color:#857E6F;margin:14px 0 6px">Folder (optional)</label>
+      <input dir="auto" list="dc-folder-options" value="{{ fFolder }}" onChange="{{ onFFolder }}" placeholder="Leave empty for Ungrouped" style="width:100%;height:48px;border-radius:12px;border:1.5px solid rgba(38,34,27,.18);background:#FFFFFF;padding:0 14px;font-size:16px;color:#26221B;outline:none" style-focus="border-color:var(--accent, #C4551C)">
+      <datalist id="dc-folder-options">
+        <sc-for list="{{ folderNames }}" as="fo" hint-placeholder-count="0"><option value="{{ fo.name }}"></option></sc-for>
+      </datalist>
+      <button onClick="{{ saveDeckM }}" style="width:100%;height:52px;margin-top:20px;border-radius:13px;border:none;background:var(--accent, #C4551C);color:#FFFFFF;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:16px;cursor:pointer;touch-action:manipulation">{{ deckModalBtn }}</button>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ mCard }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closeModal }}" style="position:fixed;inset:0;z-index:50;background:rgba(28,25,20,.45);display:flex;align-items:flex-end;justify-content:center;animation:dcFade .15s ease">
+    <div onClick="{{ eatClick }}" style="width:100%;max-width:460px;background:#FBF9F4;border-radius:22px 22px 0 0;padding:20px 20px calc(24px + env(safe-area-inset-bottom));animation:dcSheetUp .22s ease;max-height:88dvh;overflow:auto">
+      <div style="display:flex;align-items:center;margin-bottom:4px">
+        <div style="flex:1;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:18px;color:#26221B">{{ cardModalTitle }}</div>
+        <button onClick="{{ closeModal }}" aria-label="Close" style="width:38px;height:38px;border-radius:10px;border:none;background:rgba(38,34,27,.06);color:#6E6857;display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:manipulation"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg></button>
+      </div>
+      <label style="display:block;font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:11.5px;letter-spacing:.8px;text-transform:uppercase;color:#857E6F;margin:14px 0 6px">Question</label>
+      <textarea dir="auto" value="{{ fQ }}" onChange="{{ onFQ }}" rows="2" placeholder="Front of the card" style="width:100%;border-radius:12px;border:1.5px solid rgba(38,34,27,.18);background:#FFFFFF;padding:12px 14px;font-size:16px;color:#26221B;outline:none;resize:vertical;line-height:1.4" style-focus="border-color:var(--accent, #C4551C)"></textarea>
+      <label style="display:block;font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:11.5px;letter-spacing:.8px;text-transform:uppercase;color:#857E6F;margin:14px 0 6px">Answer</label>
+      <textarea dir="auto" value="{{ fA }}" onChange="{{ onFA }}" rows="2" placeholder="Back of the card" style="width:100%;border-radius:12px;border:1.5px solid rgba(38,34,27,.18);background:#FFFFFF;padding:12px 14px;font-size:16px;color:#26221B;outline:none;resize:vertical;line-height:1.4" style-focus="border-color:var(--accent, #C4551C)"></textarea>
+      <button onClick="{{ saveCardM }}" style="width:100%;height:52px;margin-top:20px;border-radius:13px;border:none;background:var(--accent, #C4551C);color:#FFFFFF;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:16px;cursor:pointer;touch-action:manipulation">{{ cardModalBtn }}</button>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ mBulk }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closeModal }}" style="position:fixed;inset:0;z-index:50;background:rgba(28,25,20,.45);display:flex;align-items:flex-end;justify-content:center;animation:dcFade .15s ease">
+    <div onClick="{{ eatClick }}" style="width:100%;max-width:460px;background:#FBF9F4;border-radius:22px 22px 0 0;padding:20px 20px calc(24px + env(safe-area-inset-bottom));animation:dcSheetUp .22s ease;max-height:88dvh;overflow:auto">
+      <div style="display:flex;align-items:center;margin-bottom:4px">
+        <div style="flex:1;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:18px;color:#26221B">Bulk add cards</div>
+        <button onClick="{{ closeModal }}" aria-label="Close" style="width:38px;height:38px;border-radius:10px;border:none;background:rgba(38,34,27,.06);color:#6E6857;display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:manipulation"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg></button>
+      </div>
+      <div style="font-size:13px;color:#857E6F;line-height:1.5;margin:6px 0 12px">One card per line, as <b>question=answer</b>. Lines without = or with an empty side are skipped.</div>
+      <textarea dir="auto" value="{{ fBulk }}" onChange="{{ onFBulk }}" rows="9" placeholder="water=agua" style="width:100%;border-radius:12px;border:1.5px solid rgba(38,34,27,.18);background:#FFFFFF;padding:12px 14px;font-size:15px;color:#26221B;outline:none;resize:vertical;line-height:1.6" style-focus="border-color:var(--accent, #C4551C)"></textarea>
+      <button onClick="{{ runBulk }}" style="width:100%;height:52px;margin-top:16px;border-radius:13px;border:none;background:var(--accent, #C4551C);color:#FFFFFF;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:16px;cursor:pointer;touch-action:manipulation">Import cards</button>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ mSettings }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closeModal }}" style="position:fixed;inset:0;z-index:50;background:rgba(28,25,20,.45);display:flex;align-items:flex-end;justify-content:center;animation:dcFade .15s ease">
+    <div onClick="{{ eatClick }}" style="width:100%;max-width:460px;background:#FBF9F4;border-radius:22px 22px 0 0;padding:20px 20px calc(24px + env(safe-area-inset-bottom));animation:dcSheetUp .22s ease;max-height:88dvh;overflow:auto">
+      <div style="display:flex;align-items:center;margin-bottom:4px">
+        <div style="flex:1;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:18px;color:#26221B">Settings</div>
+        <button onClick="{{ closeModal }}" aria-label="Close" style="width:38px;height:38px;border-radius:10px;border:none;background:rgba(38,34,27,.06);color:#6E6857;display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:manipulation"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg></button>
+      </div>
+      <label style="display:block;font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:11.5px;letter-spacing:.8px;text-transform:uppercase;color:#857E6F;margin:14px 0 6px">Question language (speech)</label>
+      <select value="{{ qLang }}" onChange="{{ onQLang }}" style="width:100%;height:48px;border-radius:12px;border:1.5px solid rgba(38,34,27,.18);background:#FFFFFF;padding:0 12px;font-size:16px;color:#26221B;outline:none">
+        <sc-for list="{{ langs }}" as="L" hint-placeholder-count="0"><option value="{{ L.code }}">{{ L.name }}</option></sc-for>
+      </select>
+      <label style="display:block;font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:11.5px;letter-spacing:.8px;text-transform:uppercase;color:#857E6F;margin:14px 0 6px">Answer language (speech)</label>
+      <select value="{{ aLang }}" onChange="{{ onALang }}" style="width:100%;height:48px;border-radius:12px;border:1.5px solid rgba(38,34,27,.18);background:#FFFFFF;padding:0 12px;font-size:16px;color:#26221B;outline:none">
+        <sc-for list="{{ langs }}" as="L2" hint-placeholder-count="0"><option value="{{ L2.code }}">{{ L2.name }}</option></sc-for>
+      </select>
+      <div style="height:1px;background:rgba(38,34,27,.1);margin:18px 0 4px"></div>
+      <button onClick="{{ toggleHiddenS }}" style="display:flex;align-items:center;gap:12px;width:100%;background:none;border:none;padding:13px 0;cursor:pointer;text-align:left;touch-action:manipulation">
+        <span style="flex:1"><span style="display:block;font-size:15px;font-weight:600;color:#26221B">Hidden options</span><span style="display:block;font-size:12.5px;color:#857E6F;margin-top:2px">Options stay invisible until you tap below the question</span></span>
+        <span style="flex:none;width:50px;height:30px;border-radius:999px;background:{{ hidBg }};position:relative;transition:background .15s"><span style="position:absolute;top:3px;left:{{ hidKnob }};width:24px;height:24px;border-radius:50%;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:left .15s"></span></span>
+      </button>
+      <button onClick="{{ toggleAutoRead }}" style="display:flex;align-items:center;gap:12px;width:100%;background:none;border:none;padding:13px 0;cursor:pointer;text-align:left;touch-action:manipulation">
+        <span style="flex:1"><span style="display:block;font-size:15px;font-weight:600;color:#26221B">Auto-read</span><span style="display:block;font-size:12.5px;color:#857E6F;margin-top:2px">Speak each question, and the answer when you get it right</span></span>
+        <span style="flex:none;width:50px;height:30px;border-radius:999px;background:{{ arBg }};position:relative;transition:background .15s"><span style="position:absolute;top:3px;left:{{ arKnob }};width:24px;height:24px;border-radius:50%;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:left .15s"></span></span>
+      </button>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ mConfirm }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closeModal }}" style="position:fixed;inset:0;z-index:55;background:rgba(28,25,20,.45);display:flex;align-items:center;justify-content:center;padding:24px;animation:dcFade .15s ease">
+    <div onClick="{{ eatClick }}" style="width:100%;max-width:340px;background:#FBF9F4;border-radius:18px;padding:20px;animation:dcSheetUp .18s ease">
+      <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:17px;color:#26221B">{{ confirmTitle }}</div>
+      <div dir="auto" style="font-size:14px;color:#6E6857;line-height:1.5;margin-top:8px">{{ confirmMsg }}</div>
+      <div style="display:flex;gap:10px;margin-top:18px">
+        <button onClick="{{ closeModal }}" style="flex:1;height:46px;border-radius:12px;border:1.5px solid rgba(38,34,27,.18);background:#FFFFFF;color:#26221B;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:14px;cursor:pointer;touch-action:manipulation">Cancel</button>
+        <button onClick="{{ confirmYes }}" style="flex:1;height:46px;border-radius:12px;border:none;background:#C6392C;color:#FFFFFF;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:14px;cursor:pointer;touch-action:manipulation">Delete</button>
+      </div>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ showOnboard }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;inset:0;z-index:80;background:#F7F4EC;display:flex;justify-content:center;overflow:auto">
+    <div style="width:100%;max-width:460px;padding:20px 24px 30px;display:flex;flex-direction:column;min-height:100%">
+      <div style="display:flex;justify-content:flex-end">
+        <button onClick="{{ dismissOnboard }}" aria-label="Close tutorial" style="width:42px;height:42px;border-radius:12px;border:1px solid rgba(38,34,27,.14);background:#FFFFFF;color:#6E6857;display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:manipulation"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg></button>
+      </div>
+      <div style="margin-top:5vh">
+        <div style="width:58px;height:58px;border-radius:17px;background:var(--accent, #C4551C);display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:26px">R</div>
+        <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:34px;letter-spacing:-.5px;color:#26221B;margin-top:18px">Recall</div>
+        <div style="font-size:15.5px;color:#6E6857;margin-top:8px;line-height:1.55">Flashcards with multiple-choice practice, speech in 9 languages, and mastery tracking — stored on your device.</div>
+        <div style="display:flex;flex-direction:column;gap:16px;margin-top:30px">
+          <div style="display:flex;gap:14px;align-items:flex-start">
+            <span style="flex:none;width:32px;height:32px;border-radius:10px;background:#FFFFFF;border:1px solid rgba(38,34,27,.14);display:flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:14px;color:var(--accent, #C4551C)">1</span>
+            <span style="flex:1"><span style="display:block;font-size:15.5px;font-weight:700;color:#26221B">Build decks</span><span style="display:block;font-size:13.5px;color:#6E6857;margin-top:3px;line-height:1.5">Add cards one at a time, or paste a list as question=answer.</span></span>
+          </div>
+          <div style="display:flex;gap:14px;align-items:flex-start">
+            <span style="flex:none;width:32px;height:32px;border-radius:10px;background:#FFFFFF;border:1px solid rgba(38,34,27,.14);display:flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:14px;color:var(--accent, #C4551C)">2</span>
+            <span style="flex:1"><span style="display:block;font-size:15.5px;font-weight:700;color:#26221B">Practice</span><span style="display:block;font-size:13.5px;color:#6E6857;margin-top:3px;line-height:1.5">Four choices per question. Two correct in a row masters a card; one miss resets it.</span></span>
+          </div>
+          <div style="display:flex;gap:14px;align-items:flex-start">
+            <span style="flex:none;width:32px;height:32px;border-radius:10px;background:#FFFFFF;border:1px solid rgba(38,34,27,.14);display:flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:14px;color:var(--accent, #C4551C)">3</span>
+            <span style="flex:1"><span style="display:block;font-size:15.5px;font-weight:700;color:#26221B">Listen</span><span style="display:block;font-size:13.5px;color:#6E6857;margin-top:3px;line-height:1.5">Tap any speaker icon to hear a card. Set question and answer languages in settings.</span></span>
+          </div>
+        </div>
+      </div>
+      <button onClick="{{ dismissOnboard }}" style="margin-top:auto;width:100%;height:56px;border-radius:15px;border:none;background:var(--accent, #C4551C);color:#FFFFFF;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:17px;cursor:pointer;touch-action:manipulation;margin-bottom:0">Get started</button>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;left:50%;transform:translateX(-50%);bottom:90px;z-index:90;background:#26221B;color:#F7F4EC;padding:11px 16px;border-radius:12px;font-size:13.5px;font-weight:500;box-shadow:0 8px 20px rgba(0,0,0,.28);max-width:min(92vw, 420px);text-align:center;animation:dcPop .18s ease">{{ toastMsg }}</div>
+</sc-if>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: {&quot;width&quot;: 430, &quot;height&quot;: 900},
+  &quot;accent&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#C4551C&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;options&quot;: [&quot;#C4551C&quot;, &quot;#0F766E&quot;, &quot;#4054C7&quot;, &quot;#8E3B72&quot;], &quot;section&quot;: &quot;Theme&quot;},
+  &quot;bigText&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: false, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Theme&quot;}
+}">
+class Component extends DCLogic {
+  rootRef = React.createRef();
+  LANGS = [
+    ['en-IN','English'],['hi-IN','Hindi'],['te-IN','Telugu'],['kn-IN','Kannada'],
+    ['ml-IN','Malayalam'],['ta-IN','Tamil'],['ur-PK','Urdu'],['fa-IR','Persian'],['ar-SA','Arabic']
+  ];
+  state = (() => {
+    const db = this.load() || this.seed();
+    return {
+      db,
+      screen: 'home',
+      deckId: null,
+      search: '',
+      modal: null,
+      f: {},
+      sess: null,
+      viewIdx: 0,
+      revealed: true,
+      toast: null,
+      onboard: !db.onboarded
+    };
+  })();
+
+  // ---------- persistence ----------
+  uid() { return 'x' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
+  load() {
+    try {
+      const raw = localStorage.getItem('flashcards.v1');
+      if (!raw) return null;
+      const d = JSON.parse(raw);
+      if (!d || d.v !== 1) return null;
+      const codes = {}; this.LANGS.forEach(L => { codes[L[0]] = 1; });
+      const out = {
+        v: 1,
+        onboarded: !!d.onboarded,
+        folders: Array.isArray(d.folders) ? d.folders.filter(f => f && f.id && typeof f.name === 'string').map(f => ({ id: String(f.id), name: f.name })) : [],
+        decks: Array.isArray(d.decks) ? d.decks.filter(k => k && k.id).map(k => ({
+          id: String(k.id),
+          name: String(k.name || 'Untitled'),
+          folderId: k.folderId || null,
+          reverse: !!k.reverse,
+          remainingOnly: !!k.remainingOnly,
+          cards: Array.isArray(k.cards) ? k.cards.filter(c => c && c.id).map(c => ({
+            id: String(c.id), q: String(c.q || ''), a: String(c.a || ''),
+            timesCorrect: c.timesCorrect | 0, timesWrong: c.timesWrong | 0,
+            consecutiveCorrect: c.consecutiveCorrect | 0,
+            lastResult: (c.lastResult === 'correct' || c.lastResult === 'wrong') ? c.lastResult : null
+          })) : []
+        })) : [],
+        streak: (d.streak && typeof d.streak === 'object') ? { last: d.streak.last || null, count: d.streak.count | 0 } : { last: null, count: 0 },
+        stats: (d.stats && typeof d.stats === 'object') ? { correct: d.stats.correct | 0, answered: d.stats.answered | 0, timeMs: (typeof d.stats.timeMs === 'number' && d.stats.timeMs > 0) ? d.stats.timeMs : 0 } : { correct: 0, answered: 0, timeMs: 0 },
+        settings: { qLang: 'en-IN', aLang: 'en-IN', hidden: false, autoRead: false },
+        ttsNoticed: (d.ttsNoticed && typeof d.ttsNoticed === 'object') ? d.ttsNoticed : {}
+      };
+      if (d.settings && typeof d.settings === 'object') {
+        if (codes[d.settings.qLang]) out.settings.qLang = d.settings.qLang;
+        if (codes[d.settings.aLang]) out.settings.aLang = d.settings.aLang;
+        out.settings.hidden = !!d.settings.hidden;
+        out.settings.autoRead = !!d.settings.autoRead;
+      }
+      return out;
+    } catch (e) { return null; }
+  }
+  seed() {
+    const mk = (q, a) => ({ id: this.uid(), q, a, timesCorrect: 0, timesWrong: 0, consecutiveCorrect: 0, lastResult: null });
+    const db = {
+      v: 1, onboarded: false, folders: [],
+      decks: [{
+        id: this.uid(), name: 'English Vocabulary', folderId: null, reverse: false, remainingOnly: false,
+        cards: [
+          mk('Ephemeral', 'Lasting a very short time'),
+          mk('Ubiquitous', 'Present everywhere at once'),
+          mk('Meticulous', 'Extremely careful and precise'),
+          mk('Resilient', 'Quick to recover from setbacks'),
+          mk('Candid', 'Honest and direct'),
+          mk('Eloquent', 'Fluent and persuasive in speaking')
+        ]
+      }],
+      streak: { last: null, count: 0 },
+      stats: { correct: 0, answered: 0, timeMs: 0 },
+      settings: { qLang: 'en-IN', aLang: 'en-IN', hidden: false, autoRead: false },
+      ttsNoticed: {}
+    };
+    try { localStorage.setItem('flashcards.v1', JSON.stringify(db)); } catch (e) {}
+    return db;
+  }
+  save() { try { localStorage.setItem('flashcards.v1', JSON.stringify(this.state.db)); } catch (e) {} }
+  mut(fn) { fn(this.state.db); this.save(); this.forceUpdate(); }
+
+  // ---------- lifecycle ----------
+  componentDidMount() {
+    try {
+      const synth = window.speechSynthesis;
+      if (synth) { synth.getVoices(); synth.onvoiceschanged = () => this.forceUpdate(); }
+    } catch (e) {}
+    this.applyTheme();
+  }
+  componentDidUpdate() { this.applyTheme(); }
+  componentWillUnmount() {
+    this.stopSpeech(); this.clearAdv();
+    if (this._toastT) clearTimeout(this._toastT);
+    if (this._speakCap) clearTimeout(this._speakCap);
+  }
+  applyTheme() {
+    const el = this.rootRef && this.rootRef.current;
+    if (!el) return;
+    const accent = this.props.accent || '#C4551C';
+    const big = !!this.props.bigText;
+    el.style.setProperty('--accent', accent);
+    el.style.setProperty('--qsize', big ? '27px' : '23px');
+    el.style.setProperty('--osize', big ? '66px' : '60px');
+    el.style.setProperty('--otext', big ? '18px' : '16px');
+  }
+
+  // ---------- misc helpers ----------
+  showToast(msg) {
+    if (this._toastT) clearTimeout(this._toastT);
+    this.setState({ toast: msg });
+    this._toastT = setTimeout(() => this.setState({ toast: null }), 3400);
+  }
+  shuffle(a) {
+    const r = a.slice();
+    for (let i = r.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = r[i]; r[i] = r[j]; r[j] = t; }
+    return r;
+  }
+  dayStr(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+  touchStreak(db) {
+    const now = new Date();
+    const today = this.dayStr(now);
+    const yest = this.dayStr(new Date(now.getTime() - 864e5));
+    const s = db.streak;
+    if (s.last === today) return;
+    s.count = (s.last === yest) ? (s.count | 0) + 1 : 1;
+    s.last = today;
+  }
+  streakNow(db) {
+    const now = new Date();
+    const today = this.dayStr(now);
+    const yest = this.dayStr(new Date(now.getTime() - 864e5));
+    return (db.streak.last === today || db.streak.last === yest) ? (db.streak.count | 0) : 0;
+  }
+  fmtTime(ms) {
+    const s = Math.floor((ms || 0) / 1000);
+    if (s < 60) return s + 's';
+    const m = Math.floor(s / 60);
+    if (m < 60) return m + 'm';
+    return Math.floor(m / 60) + 'h ' + (m % 60) + 'm';
+  }
+  isMastered(c) { return (c.consecutiveCorrect | 0) >= 2; }
+  curDeck() { return this.state.db.decks.find(d => d.id === this.state.deckId) || null; }
+  langLabel(code) { const L = this.LANGS.find(x => x[0] === code); return L ? L[1] : code; }
+  promptLang(t) { const st = this.state.db.settings; return t.rev ? st.aLang : st.qLang; }
+  optLang(t) { const st = this.state.db.settings; return t.rev ? st.qLang : st.aLang; }
+
+  // ---------- speech ----------
+  stopSpeech() { try { window.speechSynthesis.cancel(); } catch (e) {} }
+  langNotice(lang) {
+    const db = this.state.db;
+    if (db.ttsNoticed && db.ttsNoticed[lang]) return;
+    this.mut(d => { d.ttsNoticed[lang] = true; });
+    this.showToast('No ' + this.langLabel(lang) + ' voice available on this device');
+  }
+  speak(text, lang, onend) {
+    let done = false;
+    const fin = () => { if (done) return; done = true; if (onend) onend(); };
+    let synth = null;
+    try { synth = window.speechSynthesis; } catch (e) {}
+    if (!synth || !text) { fin(); return; }
+    if (this._speakCap) { clearTimeout(this._speakCap); this._speakCap = null; }
+    try { synth.cancel(); } catch (e) {}
+    let voices = [];
+    try { voices = synth.getVoices() || []; } catch (e) {}
+    const base = String(lang || '').slice(0, 2).toLowerCase();
+    const norm = v => String(v.lang || '').replace('_', '-').toLowerCase();
+    const voice = voices.find(v => norm(v) === String(lang).toLowerCase()) || voices.find(v => norm(v).indexOf(base) === 0) || null;
+    if (voices.length && !voice) { this.langNotice(lang); fin(); return; }
+    try {
+      const u = new SpeechSynthesisUtterance(String(text));
+      u.lang = lang;
+      if (voice) u.voice = voice;
+      u.onend = fin;
+      u.onerror = fin;
+      this._utter = u;
+      try { synth.resume(); } catch (e) {}
+      synth.speak(u);
+      this._speakCap = setTimeout(fin, Math.min(20000, 3000 + String(text).length * 120));
+    } catch (e) { fin(); }
+  }
+
+  // ---------- session engine ----------
+  startSession() {
+    const db = this.state.db;
+    const deck = this.curDeck();
+    if (!deck) return;
+    if (deck.cards.length < 4) { this.showToast('Add at least 4 cards to practice'); return; }
+    let pool = deck.cards;
+    if (deck.remainingOnly) pool = pool.filter(c => !this.isMastered(c));
+    if (!pool.length) { this.showToast('All cards mastered — turn off "Practice remaining only" to review'); return; }
+    const wrong = [], fresh = [], rest = [];
+    pool.forEach(c => { if (c.lastResult === 'wrong') wrong.push(c); else if (c.lastResult == null) fresh.push(c); else rest.push(c); });
+    const queue = this.shuffle(wrong).concat(this.shuffle(fresh)).concat(this.shuffle(rest)).map(c => c.id);
+    const s = { deckId: deck.id, queue, turns: [], answered: {}, lastMark: Date.now() };
+    this._gen(s);
+    if (!s.turns.length) return;
+    this.stopSpeech(); this.clearAdv();
+    this.setState({ screen: 'session', sess: s, viewIdx: 0, revealed: !db.settings.hidden }, () => {
+      const t = s.turns[0];
+      if (t && this.state.db.settings.autoRead) this.speak(t.prompt, this.promptLang(t), null);
+    });
+  }
+  _gen(s) {
+    const db = this.state.db;
+    const deck = db.decks.find(d => d.id === s.deckId);
+    if (!deck) return false;
+    let card = null;
+    while (s.queue.length) {
+      const id = s.queue.shift();
+      if (s.answered[id]) continue;
+      const c = deck.cards.find(x => x.id === id);
+      if (!c) continue;
+      card = c; break;
+    }
+    if (!card) return false;
+    const rev = !!deck.reverse;
+    const correct = rev ? card.q : card.a;
+    const seen = {}; const pool = [];
+    deck.cards.forEach(c2 => {
+      if (c2.id === card.id) return;
+      const t2 = rev ? c2.q : c2.a;
+      if (t2 === correct || seen[t2]) return;
+      seen[t2] = 1; pool.push(t2);
+    });
+    const ds = this.shuffle(pool).slice(0, 3);
+    const options = this.shuffle([correct].concat(ds));
+    s.turns.push({
+      id: this.uid(), cardId: card.id, rev,
+      prompt: rev ? card.a : card.q,
+      options, correctIdx: options.indexOf(correct),
+      sel: null, result: null, skipped: false
+    });
+    return true;
+  }
+  presentLive() {
+    const s = this.state.sess;
+    if (!s || !s.turns.length) return;
+    const li = s.turns.length - 1;
+    const t = s.turns[li];
+    this.stopSpeech();
+    this.setState({ viewIdx: li, revealed: !this.state.db.settings.hidden });
+    if (this.state.db.settings.autoRead && t) this.speak(t.prompt, this.promptLang(t), null);
+  }
+  nextTurn() {
+    const s = this.state.sess;
+    if (!s) return;
+    this.clearAdv();
+    if (this._gen(s)) this.presentLive(); else this.finishSession();
+  }
+  markTime(s, db) {
+    const now = Date.now();
+    const dt = now - (s.lastMark || now);
+    if (dt > 0) db.stats.timeMs = (db.stats.timeMs || 0) + dt;
+    s.lastMark = now;
+  }
+  hiddenNowCalc() {
+    const S = this.state, s = S.sess;
+    if (!s || !s.turns.length) return false;
+    const li = s.turns.length - 1;
+    const t = s.turns[S.viewIdx];
+    return S.viewIdx === li && t && t.sel == null && !S.revealed;
+  }
+  pick(turnIdx, optIdx) {
+    const S = this.state, s = S.sess;
+    if (!s) return;
+    const t = s.turns[turnIdx];
+    if (!t || t.sel != null) return;
+    const li = s.turns.length - 1;
+    const isLive = turnIdx === li;
+    if (isLive && this.hiddenNowCalc()) return;
+    if (!isLive && !(t.skipped && !s.answered[t.cardId])) return;
+    t.sel = optIdx;
+    t.result = (optIdx === t.correctIdx) ? 'correct' : 'wrong';
+    s.answered[t.cardId] = true;
+    s.queue = s.queue.filter(x => x !== t.cardId);
+    const db = S.db;
+    const deck = db.decks.find(d => d.id === s.deckId);
+    const card = deck ? deck.cards.find(c => c.id === t.cardId) : null;
+    if (card) {
+      if (t.result === 'correct') { card.timesCorrect = (card.timesCorrect | 0) + 1; card.consecutiveCorrect = (card.consecutiveCorrect | 0) + 1; }
+      else { card.timesWrong = (card.timesWrong | 0) + 1; card.consecutiveCorrect = 0; }
+      card.lastResult = t.result;
+    }
+    db.stats.answered++;
+    if (t.result === 'correct') db.stats.correct++;
+    this.touchStreak(db);
+    this.markTime(s, db);
+    this.save();
+    this.stopSpeech();
+    const ar = db.settings.autoRead;
+    if (t.result === 'correct') {
+      if (isLive) this.armAdvance(t.id, ar);
+      if (ar) this.speak(t.options[t.correctIdx], this.optLang(t), () => this.advFlag(t.id, 'tts'));
+    }
+    this.forceUpdate();
+  }
+  armAdvance(tid, waitTts) {
+    this.clearAdv();
+    const a = { tid, timer: false, tts: !waitTts };
+    this._adv = a;
+    this._advT = setTimeout(() => { if (this._adv === a) { a.timer = true; this.tryAdv(); } }, 800);
+  }
+  advFlag(tid, k) { if (this._adv && this._adv.tid === tid) { this._adv[k] = true; this.tryAdv(); } }
+  tryAdv() {
+    const a = this._adv, s = this.state.sess;
+    if (!a || !s || this.state.screen !== 'session') return;
+    if (!a.timer || !a.tts) return;
+    const li = s.turns.length - 1;
+    const t = s.turns[li];
+    if (!t || t.id !== a.tid) return;
+    if (this.state.viewIdx !== li) return;
+    this._adv = null;
+    if (this._advT) { clearTimeout(this._advT); this._advT = null; }
+    this.nextTurn();
+  }
+  clearAdv() {
+    if (this._advT) { clearTimeout(this._advT); this._advT = null; }
+    this._adv = null;
+  }
+  resumeAdv() {
+    const a = this._adv;
+    if (!a) return;
+    if (this._advT) clearTimeout(this._advT);
+    a.timer = false;
+    this._advT = setTimeout(() => { if (this._adv === a) { a.timer = true; this.tryAdv(); } }, 800);
+  }
+  goView(idx) {
+    const s = this.state.sess;
+    if (!s) return;
+    const li = s.turns.length - 1;
+    const v = Math.max(0, Math.min(li, idx));
+    if (v === this.state.viewIdx) return;
+    this.stopSpeech();
+    this.setState({ viewIdx: v }, () => { if (v === li) this.resumeAdv(); });
+  }
+  skipTurn() {
+    const S = this.state, s = S.sess;
+    if (!s) return;
+    const li = s.turns.length - 1;
+    if (S.viewIdx !== li) return;
+    const t = s.turns[li];
+    if (!t || t.sel != null) return;
+    t.skipped = true;
+    s.queue.push(t.cardId);
+    this.markTime(s, S.db);
+    this.save();
+    this.clearAdv();
+    if (this._gen(s)) this.presentLive(); else this.finishSession();
+  }
+  finishSession() {
+    const S = this.state, s = S.sess;
+    if (!s) return;
+    this.markTime(s, S.db);
+    this.save();
+    this.stopSpeech();
+    this.clearAdv();
+    this.setState({ screen: 'results' });
+  }
+
+  // ---------- CRUD ----------
+  openDeck(id) { this.setState({ screen: 'deck', deckId: id, search: '' }); }
+  saveDeckModal() {
+    const f = this.state.f;
+    const name = (f.name || '').trim();
+    if (!name) { this.showToast('Give the deck a name'); return; }
+    const folderName = (f.folder || '').trim();
+    const m = this.state.modal;
+    let openId = null;
+    this.mut(db => {
+      let folderId = null;
+      if (folderName) {
+        let fo = db.folders.find(x => x.name.toLowerCase() === folderName.toLowerCase());
+        if (!fo) { fo = { id: this.uid(), name: folderName }; db.folders.push(fo); }
+        folderId = fo.id;
+      }
+      if (m.mode === 'new') {
+        const d = { id: this.uid(), name, folderId, reverse: false, remainingOnly: false, cards: [] };
+        db.decks.push(d); openId = d.id;
+      } else {
+        const d = db.decks.find(x => x.id === m.deckId);
+        if (d) { d.name = name; d.folderId = folderId; }
+      }
+    });
+    if (openId) this.setState({ screen: 'deck', deckId: openId, modal: null, search: '', f: {} });
+    else this.setState({ modal: null, f: {} });
+  }
+  saveCardModal() {
+    const f = this.state.f;
+    const q = (f.q || '').trim();
+    const a = (f.a || '').trim();
+    if (!q || !a) { this.showToast('Both question and answer are required'); return; }
+    const m = this.state.modal;
+    this.mut(db => {
+      const d = db.decks.find(x => x.id === this.state.deckId);
+      if (!d) return;
+      if (m.mode === 'new') d.cards.push({ id: this.uid(), q, a, timesCorrect: 0, timesWrong: 0, consecutiveCorrect: 0, lastResult: null });
+      else { const c = d.cards.find(x => x.id === m.cardId); if (c) { c.q = q; c.a = a; } }
+    });
+    this.setState({ modal: null, f: {} });
+  }
+  runBulk() {
+    const text = this.state.f.bulk || '';
+    const lines = text.split(/\r?\n/);
+    let added = 0, skipped = 0;
+    const rows = [];
+    lines.forEach(line => {
+      if (!line.trim()) { skipped++; return; }
+      const i = line.indexOf('=');
+      if (i < 0) { skipped++; return; }
+      const q = line.slice(0, i).trim();
+      const a = line.slice(i + 1).trim();
+      if (!q || !a) { skipped++; return; }
+      rows.push({ q, a }); added++;
+    });
+    if (added) {
+      this.mut(db => {
+        const d = db.decks.find(x => x.id === this.state.deckId);
+        if (d) rows.forEach(r => d.cards.push({ id: this.uid(), q: r.q, a: r.a, timesCorrect: 0, timesWrong: 0, consecutiveCorrect: 0, lastResult: null }));
+      });
+      this.setState({ modal: null, f: {} });
+    }
+    this.showToast(added + ' cards added, ' + skipped + ' lines skipped');
+  }
+  delDeck(id) {
+    this.mut(db => { db.decks = db.decks.filter(d => d.id !== id); });
+    this.setState({ screen: 'home', deckId: null });
+  }
+  delFolder(id) {
+    this.mut(db => {
+      db.decks.forEach(d => { if (d.folderId === id) d.folderId = null; });
+      db.folders = db.folders.filter(f => f.id !== id);
+    });
+  }
+  delCard(id) {
+    this.mut(db => {
+      const d = db.decks.find(x => x.id === this.state.deckId);
+      if (d) d.cards = d.cards.filter(c => c.id !== id);
+    });
+    const s = this.state.sess;
+    if (s && this.state.screen === 'session') {
+      s.queue = s.queue.filter(x => x !== id);
+      const li = s.turns.length - 1;
+      const lt = s.turns[li];
+      if (lt && lt.cardId === id && lt.sel == null) {
+        s.turns.pop();
+        this.clearAdv();
+        if (this._gen(s)) this.presentLive(); else this.finishSession();
+      } else this.forceUpdate();
+    }
+  }
+  confirmYesRun() {
+    const m = this.state.modal;
+    if (!m) return;
+    this.setState({ modal: null }, () => {
+      if (m.action === 'deck') this.delDeck(m.id);
+      else if (m.action === 'folder') this.delFolder(m.id);
+      else if (m.action === 'card') this.delCard(m.id);
+    });
+  }
+  toggleDeckFlag(key) { this.mut(db => { const d = db.decks.find(x => x.id === this.state.deckId); if (d) d[key] = !d[key]; }); }
+  toggleSetting(key) {
+    this.mut(db => { db.settings[key] = !db.settings[key]; });
+    if (key === 'hidden' && !this.state.db.settings.hidden) this.setState({ revealed: true });
+  }
+
+  // ---------- render ----------
+  renderVals() {
+    const S = this.state;
+    const db = S.db;
+    const st = db.settings;
+    const self = this;
+    const line = 'rgba(38,34,27,.16)';
+    const deckVM = d => {
+      const total = d.cards.length;
+      const m = d.cards.filter(c => self.isMastered(c)).length;
+      const pct = total ? Math.round(m / total * 100) : 0;
+      return {
+        id: d.id, name: d.name, pct: pct + '%', pctW: pct + '%',
+        sub: total + (total === 1 ? ' card' : ' cards') + ' · ' + m + ' mastered · ' + (total - m) + ' remaining',
+        open: () => self.openDeck(d.id)
+      };
+    };
+
+    // home
+    const term = S.search.trim().toLowerCase();
+    const searching = term.length > 0;
+    let sDecks = [], sCards = [];
+    if (searching) {
+      sDecks = db.decks.filter(d => d.name.toLowerCase().indexOf(term) >= 0).map(deckVM);
+      db.decks.forEach(d => {
+        d.cards.forEach(c => {
+          if (sCards.length >= 30) return;
+          if (c.q.toLowerCase().indexOf(term) >= 0 || c.a.toLowerCase().indexOf(term) >= 0)
+            sCards.push({ q: c.q, a: c.a, deckName: d.name, open: () => self.openDeck(d.id) });
+        });
+      });
+    }
+    const folders = db.folders.map(fo => {
+      const decks = db.decks.filter(d => d.folderId === fo.id).map(deckVM);
+      return {
+        id: fo.id, name: fo.name, decks,
+        count: decks.length + (decks.length === 1 ? ' deck' : ' decks'),
+        empty: decks.length === 0,
+        del: () => this.setState({ modal: { type: 'confirm', action: 'folder', id: fo.id, title: 'Delete folder?', msg: '"' + fo.name + '" will be removed. Its decks move to Ungrouped.' } })
+      };
+    });
+    const ungrouped = db.decks.filter(d => !d.folderId).map(deckVM);
+
+    // deck screen
+    const deck = this.curDeck();
+    const isDeck = S.screen === 'deck' && !!deck;
+    let deckVals = {};
+    if (isDeck) {
+      const total = deck.cards.length;
+      const m = deck.cards.filter(c => self.isMastered(c)).length;
+      const remaining = total - m;
+      const pct = total ? Math.round(m / total * 100) : 0;
+      const folder = db.folders.find(f => f.id === deck.folderId) || null;
+      let note = '';
+      if (total < 4) note = 'Add ' + (4 - total) + ' more card' + (4 - total === 1 ? '' : 's') + ' to practice (minimum 4)';
+      else if (deck.remainingOnly && remaining === 0) note = 'All cards mastered — turn off "Practice remaining only" to review';
+      const can = !note;
+      deckVals = {
+        dName: deck.name,
+        hasFolder: !!folder,
+        dFolder: folder ? folder.name : '',
+        dPct: pct + '%', dPctW: pct + '%',
+        dMastered: m, dRemaining: remaining,
+        dTotalLabel: total + (total === 1 ? ' card' : ' cards'),
+        dCount: total,
+        revBg: deck.reverse ? 'var(--accent, #C4551C)' : 'rgba(38,34,27,.18)',
+        revKnob: deck.reverse ? '23px' : '3px',
+        remBg: deck.remainingOnly ? 'var(--accent, #C4551C)' : 'rgba(38,34,27,.18)',
+        remKnob: deck.remainingOnly ? '23px' : '3px',
+        toggleRev: () => self.toggleDeckFlag('reverse'),
+        toggleRem: () => self.toggleDeckFlag('remainingOnly'),
+        pracBg: can ? 'var(--accent, #C4551C)' : 'rgba(38,34,27,.12)',
+        pracFg: can ? '#FFFFFF' : '#9A937F',
+        hasNote: !!note, practiceNote: note,
+        startPractice: () => self.startSession(),
+        renameDeck: () => this.setState({ modal: { type: 'deck', mode: 'edit', deckId: deck.id }, f: { name: deck.name, folder: folder ? folder.name : '' } }),
+        deckDelete: () => this.setState({ modal: { type: 'confirm', action: 'deck', id: deck.id, title: 'Delete deck?', msg: '"' + deck.name + '" and its ' + total + ' card' + (total === 1 ? '' : 's') + ' will be deleted. This cannot be undone.' } }),
+        addCard: () => this.setState({ modal: { type: 'card', mode: 'new' }, f: { q: '', a: '' } }),
+        bulkAdd: () => this.setState({ modal: { type: 'bulk' }, f: { bulk: '' } }),
+        dEmpty: total === 0,
+        dCards: deck.cards.map(c => ({
+          q: c.q, a: c.a,
+          right: '\u2713 ' + (c.timesCorrect | 0),
+          wrongN: '\u2717 ' + (c.timesWrong | 0),
+          mastered: self.isMastered(c),
+          edit: () => this.setState({ modal: { type: 'card', mode: 'edit', cardId: c.id }, f: { q: c.q, a: c.a } }),
+          del: () => this.setState({ modal: { type: 'confirm', action: 'card', id: c.id, title: 'Delete card?', msg: '"' + c.q + '" will be removed from this deck.' } })
+        }))
+      };
+    }
+
+    // session
+    const s = S.sess;
+    const isSession = S.screen === 'session' && !!s && s.turns.length > 0;
+    let sessVals = {};
+    if (isSession) {
+      const li = s.turns.length - 1;
+      const vi = Math.max(0, Math.min(li, S.viewIdx));
+      const t = s.turns[vi];
+      const reviewing = vi < li;
+      const total = s.turns.length + s.queue.length;
+      const answerable = t.sel == null && (!reviewing || (t.skipped && !s.answered[t.cardId]));
+      const hiddenNow = this.hiddenNowCalc();
+      const sessDeck = db.decks.find(d => d.id === s.deckId);
+      sessVals = {
+        sessDeckName: sessDeck ? sessDeck.name : '',
+        qLabel: 'Question ' + (vi + 1) + ' of ' + total,
+        turnPrompt: t.prompt,
+        turnSkipped: !!t.skipped && t.sel == null && !reviewing ? false : (!!t.skipped && t.sel == null),
+        reviewing,
+        histNote: t.sel != null ? 'Reviewing — read-only' : (t.skipped && !s.answered[t.cardId] ? 'Skipped earlier — you can answer it' : 'Reviewing — read-only'),
+        goCurrent: () => self.goView(s.turns.length - 1),
+        isLiveView: !reviewing,
+        editLive: () => {
+          const dk = db.decks.find(d => d.id === s.deckId);
+          const c = dk ? dk.cards.find(x => x.id === t.cardId) : null;
+          if (c) this.setState({ modal: { type: 'card', mode: 'edit', cardId: c.id }, f: { q: c.q, a: c.a } });
+        },
+        delLive: () => this.setState({ modal: { type: 'confirm', action: 'card', id: t.cardId, title: 'Delete card?', msg: 'This card will be removed. The session moves on immediately.' } }),
+        speakPrompt: () => self.speak(t.prompt, self.promptLang(t), null),
+        reveal: () => { if (self.hiddenNowCalc()) self.setState({ revealed: true }); },
+        hiddenNow,
+        optsVis: hiddenNow ? 'hidden' : 'visible',
+        showSkip: !reviewing && t.sel == null,
+        doSkip: () => self.skipTurn(),
+        showNext: !reviewing && t.sel != null && t.result === 'wrong',
+        goNext: () => self.nextTurn(),
+        goBack: () => self.goView(vi - 1),
+        backOp: vi > 0 ? 1 : 0.35,
+        goFwd: () => self.goView(vi + 1),
+        fwdOp: reviewing ? 1 : 0.35,
+        endSession: () => self.finishSession(),
+        opts: t.options.map((text, i) => {
+          const answered = t.sel != null;
+          let bg = '#FFFFFF', bd = line, fg = '#26221B', dim = 1, w = 500;
+          if (answered) {
+            if (i === t.correctIdx) { bg = '#E7F4EC'; bd = '#1E8A5A'; fg = '#14532D'; w = 700; }
+            else if (i === t.sel) { bg = '#FBEAE8'; bd = '#C6392C'; fg = '#7F1D1D'; w = 600; }
+            else { dim = 0.5; }
+          }
+          return {
+            text, bg, bd, fg, dim, w,
+            pick: () => self.pick(vi, i),
+            speak: (e) => { if (e && e.stopPropagation) e.stopPropagation(); self.speak(text, self.optLang(t), null); }
+          };
+        })
+      };
+    }
+
+    // results
+    const isResults = S.screen === 'results' && !!s;
+    let resVals = {};
+    if (isResults) {
+      const rows = [];
+      const seenSkip = {};
+      let correctN = 0, answeredN = 0, skippedN = 0;
+      s.turns.forEach(t => {
+        if (t.sel != null) {
+          answeredN++;
+          const ok = t.result === 'correct';
+          if (ok) correctN++;
+          rows.push({
+            q: t.prompt,
+            dot: ok ? '#1E8A5A' : '#C6392C',
+            ansLine: 'Your answer: ' + t.options[t.sel],
+            ansColor: ok ? '#6E6857' : '#C6392C',
+            showCorrect: !ok,
+            correctLine: 'Correct: ' + t.options[t.correctIdx],
+            tag: ok ? 'Right' : 'Wrong',
+            tagColor: ok ? '#1E8A5A' : '#C6392C'
+          });
+        } else if (!s.answered[t.cardId] && !seenSkip[t.cardId]) {
+          seenSkip[t.cardId] = 1; skippedN++;
+          rows.push({ q: t.prompt, dot: '#B9B29F', ansLine: 'Not answered', ansColor: '#9A937F', showCorrect: false, correctLine: '', tag: 'Skipped', tagColor: '#9A937F' });
+        }
+      });
+      resVals = {
+        resScore: correctN + '/' + answeredN,
+        resSub: 'correct of answered' + (skippedN ? ' · ' + skippedN + ' skipped' : ''),
+        resAcc: answeredN ? Math.round(correctN / answeredN * 100) + '%' : '—',
+        resRows: rows,
+        backToDeck: () => this.setState({ screen: 'deck', sess: null, viewIdx: 0 })
+      };
+    }
+
+    // modal
+    const m = S.modal;
+    const f = S.f;
+    const fieldSet = key => e => this.setState({ f: Object.assign({}, this.state.f, { [key]: e.target.value }) });
+
+    return Object.assign({
+      rootRef: this.rootRef,
+      isHome: S.screen === 'home',
+      isDeck,
+      isSession,
+      isResults,
+      // home
+      statStreak: this.streakNow(db),
+      statAcc: db.stats.answered ? Math.round(db.stats.correct / db.stats.answered * 100) + '%' : '—',
+      statTime: this.fmtTime(db.stats.timeMs),
+      search: S.search,
+      onSearch: e => this.setState({ search: e.target.value }),
+      searching,
+      notSearching: !searching,
+      sDecks, sCards,
+      sDecksAny: sDecks.length > 0,
+      sCardsAny: sCards.length > 0,
+      sNone: searching && !sDecks.length && !sCards.length,
+      folders,
+      ungrouped,
+      hasUngrouped: ungrouped.length > 0,
+      ungroupedCount: ungrouped.length + (ungrouped.length === 1 ? ' deck' : ' decks'),
+      noDecks: db.decks.length === 0,
+      newDeck: () => this.setState({ modal: { type: 'deck', mode: 'new' }, f: { name: '', folder: '' } }),
+      openSettings: () => this.setState({ modal: { type: 'settings' } }),
+      goHome: () => { this.stopSpeech(); this.setState({ screen: 'home', sess: null, viewIdx: 0 }); },
+      // modals
+      mDeck: !!m && m.type === 'deck',
+      deckModalTitle: m && m.mode === 'edit' ? 'Edit deck' : 'New deck',
+      deckModalBtn: m && m.mode === 'edit' ? 'Save changes' : 'Create deck',
+      fName: f.name || '', onFName: fieldSet('name'),
+      fFolder: f.folder || '', onFFolder: fieldSet('folder'),
+      folderNames: db.folders.map(fo => ({ name: fo.name })),
+      saveDeckM: () => this.saveDeckModal(),
+      mCard: !!m && m.type === 'card',
+      cardModalTitle: m && m.mode === 'edit' ? 'Edit card' : 'Add card',
+      cardModalBtn: m && m.mode === 'edit' ? 'Save card' : 'Add card',
+      fQ: f.q || '', onFQ: fieldSet('q'),
+      fA: f.a || '', onFA: fieldSet('a'),
+      saveCardM: () => this.saveCardModal(),
+      mBulk: !!m && m.type === 'bulk',
+      fBulk: f.bulk || '', onFBulk: fieldSet('bulk'),
+      runBulk: () => this.runBulk(),
+      mSettings: !!m && m.type === 'settings',
+      langs: this.LANGS.map(L => ({ code: L[0], name: L[1] })),
+      qLang: st.qLang,
+      aLang: st.aLang,
+      onQLang: e => this.mut(d => { d.settings.qLang = e.target.value; }),
+      onALang: e => this.mut(d => { d.settings.aLang = e.target.value; }),
+      hidBg: st.hidden ? 'var(--accent, #C4551C)' : 'rgba(38,34,27,.18)',
+      hidKnob: st.hidden ? '23px' : '3px',
+      arBg: st.autoRead ? 'var(--accent, #C4551C)' : 'rgba(38,34,27,.18)',
+      arKnob: st.autoRead ? '23px' : '3px',
+      toggleHiddenS: () => this.toggleSetting('hidden'),
+      toggleAutoRead: () => this.toggleSetting('autoRead'),
+      mConfirm: !!m && m.type === 'confirm',
+      confirmTitle: m && m.title ? m.title : '',
+      confirmMsg: m && m.msg ? m.msg : '',
+      confirmYes: () => this.confirmYesRun(),
+      closeModal: () => this.setState({ modal: null }),
+      eatClick: e => { if (e && e.stopPropagation) e.stopPropagation(); },
+      // onboarding + toast
+      showOnboard: S.onboard,
+      dismissOnboard: () => { this.mut(d => { d.onboarded = true; }); this.setState({ onboard: false }); },
+      hasToast: !!S.toast,
+      toastMsg: S.toast || ''
+    }, deckVals, sessVals, resVals);
+  }
+}
+</script>
+</body>
+</html>
