@@ -68,13 +68,17 @@ export function loadDB(): DB | null {
             timeMs: typeof d.stats.timeMs === 'number' && d.stats.timeMs > 0 ? d.stats.timeMs : 0,
           }
         : { correct: 0, answered: 0, timeMs: 0 },
-      settings: { qLang: 'en-IN', aLang: 'en-IN', hidden: false, autoRead: false },
+      settings: { qLang: 'en-US', aLang: 'en-US', hidden: false, autoRead: false },
       ttsNoticed: isRecord(d.ttsNoticed) ? (d.ttsNoticed as Record<string, boolean>) : {},
     }
     if (isRecord(d.settings)) {
       const s = d.settings
-      if (typeof s.qLang === 'string' && knownCodes.has(s.qLang)) out.settings.qLang = s.qLang
-      if (typeof s.aLang === 'string' && knownCodes.has(s.aLang)) out.settings.aLang = s.aLang
+      // en-IN was replaced by en-US/en-GB; migrate old selections so pickers never point at a removed option
+      const migrate = (code: unknown) => (code === 'en-IN' ? 'en-US' : code)
+      const qLang = migrate(s.qLang)
+      const aLang = migrate(s.aLang)
+      if (typeof qLang === 'string' && knownCodes.has(qLang)) out.settings.qLang = qLang
+      if (typeof aLang === 'string' && knownCodes.has(aLang)) out.settings.aLang = aLang
       out.settings.hidden = !!s.hidden
       out.settings.autoRead = !!s.autoRead
     }
@@ -112,7 +116,7 @@ export function seedDB(): DB {
     ],
     streak: { last: null, count: 0 },
     stats: { correct: 0, answered: 0, timeMs: 0 },
-    settings: { qLang: 'en-IN', aLang: 'en-IN', hidden: false, autoRead: false },
+    settings: { qLang: 'en-US', aLang: 'en-US', hidden: false, autoRead: false },
     ttsNoticed: {},
   }
   saveDB(db)

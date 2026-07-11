@@ -382,8 +382,9 @@ export class FlashcardsStore {
     if (S.viewIdx !== li) return
     const t = s.turns[li]
     if (!t || t.sel != null) return
+    // A skip is not re-queued: the session total stays fixed and the card can
+    // only be answered later via backward navigation.
     t.skipped = true
-    s.queue.push(t.cardId)
     this.markTime(s, S.db)
     this.save()
     this.clearAdvance()

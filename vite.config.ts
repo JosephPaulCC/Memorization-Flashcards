@@ -14,7 +14,7 @@ export default defineConfig({
         name: 'Recall — Memorization Flashcards',
         short_name: 'Recall',
         description:
-          'Flashcards with multiple-choice practice, speech in 9 languages, and mastery tracking — stored on your device.',
+          'Flashcards with multiple-choice practice, speech in 10 languages, and mastery tracking — stored on your device.',
         start_url: '/',
         display: 'standalone',
         orientation: 'portrait',

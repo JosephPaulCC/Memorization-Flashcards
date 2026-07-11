@@ -54,7 +54,7 @@ export function Onboarding() {
             Recall
           </div>
           <div style={{ fontSize: 15.5, color: '#6E6857', marginTop: 8, lineHeight: 1.55 }}>
-            Flashcards with multiple-choice practice, speech in 9 languages, and mastery tracking — stored on your device.
+            Flashcards with multiple-choice practice, speech in 10 languages, and mastery tracking — stored on your device.
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginTop: 30 }}>
             {steps.map((s) => (

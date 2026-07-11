@@ -106,7 +106,8 @@ export interface UIState {
 }
 
 export const LANGS: [string, string][] = [
-  ['en-IN', 'English'],
+  ['en-US', 'English (US)'],
+  ['en-GB', 'English (UK)'],
   ['hi-IN', 'Hindi'],
   ['te-IN', 'Telugu'],
   ['kn-IN', 'Kannada'],
