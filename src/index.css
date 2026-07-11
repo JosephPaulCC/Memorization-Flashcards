@@ -1,0 +1,81 @@
+@import "tailwindcss";
+
+:root {
+  --accent: #C4551C;
+  --qsize: 23px;
+  --osize: 60px;
+  --otext: 16px;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #F1EDE3;
+}
+
+body {
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans', 'Helvetica Neue', sans-serif;
+  color: #26221B;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior-y: none;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+input, textarea, select, button {
+  font-family: inherit;
+}
+
+a {
+  color: #C4551C;
+}
+a:hover {
+  color: #9E3E0E;
+}
+
+.font-display {
+  font-family: 'Bricolage Grotesque', sans-serif;
+}
+
+@keyframes dcSheetUp {
+  from { transform: translateY(28px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes dcFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes dcPop {
+  from { opacity: 0; transform: translateX(-50%) translateY(8px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+.anim-sheet-up {
+  animation: dcSheetUp 0.22s ease;
+}
+.anim-fade {
+  animation: dcFade 0.15s ease;
+}
+.anim-pop {
+  animation: dcPop 0.18s ease;
+}
+
+.dc-input {
+  border: 1.5px solid rgba(38,34,27,.18);
+  outline: none;
+  transition: border-color 0.15s;
+}
+.dc-input:focus {
+  border-color: var(--accent, #C4551C);
+}
+
+.tap-99, .tap-985, .tap-97, .tap-94 {
+  transition: transform 0.06s ease;
+}
+.tap-99:active { transform: scale(0.99); }
+.tap-985:active { transform: scale(0.985); }
+.tap-97:active { transform: scale(0.97); }
+.tap-94:active { transform: scale(0.94); }
